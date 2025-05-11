@@ -39,7 +39,7 @@ export default function Home() {
         {messages.map((msg, i) => (
           <div key={i} className={`p-2 rounded-lg ${msg.from === 'ai' ? 'bg-gray-700' : 'bg-blue-600'} text-white`}>
             {msg.text}
-            {msg.audio && <audio controls src={msg.audio} />}
+            //{msg.audio && <audio controls src={msg.audio} />}
           </div>
         ))}
       </div>
