@@ -25,10 +25,24 @@ export default function Home() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: input })
       });
-      const data = await res.json();
-      setMessages(prev => [...prev, { from: 'ai', text: data.text, audio: data.audio }]);
+
+      const contentType = res.headers.get("Content-Type");
+      if (!res.ok) {
+        const errorText = await res.text();
+        console.error("🔥 Lỗi backend:", errorText);
+        return;
+      }
+
+      if (contentType && contentType.includes("application/json")) {
+        const data = await res.json();
+        setMessages(prev => [...prev, { from: 'ai', text: data.text, audio: data.audio }]);
+      } else {
+        const raw = await res.text();
+        console.warn("⚠️ Không phải JSON:", raw);
+      }
+
     } catch (err) {
-      console.error("Lỗi gửi message:", err);
+      console.error("💥 Fetch lỗi:", err);
     }
   };
 
