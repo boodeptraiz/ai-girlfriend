@@ -2,6 +2,10 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import axios from 'axios';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method Not Allowed' });
+  }
+
   const { message } = req.body;
   const openai = process.env.OPENAI_API_KEY;
 
@@ -16,7 +20,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   });
 
   const text = completion.data.choices[0].message.content;
-  const audio = null;
-
-  res.status(200).json({ text, audio });
+  res.status(200).json({ text, audio: null });
 }
